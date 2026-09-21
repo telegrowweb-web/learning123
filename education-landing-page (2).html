@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn with Pankaj Bharadwaj | SEBI Registered Research Analyst</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0f1e;
+      --card: rgba(16, 22, 40, 0.8);
+      --accent: #6366f1;
+      --cyan: #22d3ee;
+      --pink: #f472b6;
+      --text: #e8ecf4;
+      --muted: #94a3b8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* Background */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99, 102, 241, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.4;
+      pointer-events: none;
+      animation: float 14s ease-in-out infinite;
+    }
+    .orb-1 { width: 360px; height: 360px; background: var(--accent); top: -100px; left: -80px; }
+    .orb-2 { width: 280px; height: 280px; background: var(--cyan); bottom: -60px; right: -60px; animation-delay: -5s; }
+    .orb-3 { width: 200px; height: 200px; background: var(--pink); top: 40%; left: 60%; opacity: 0.22; animation-delay: -8s; }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(20px, -18px); }
+    }
+
+    /* Main layout – single viewport */
+    .page {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      height: 100dvh;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 14px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Top badge */
+    .top-badge {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #a5b4fc;
+      animation: fadeDown 0.6s ease both;
+    }
+    .top-badge .dot {
+      width: 5px; height: 5px;
+      background: var(--cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--cyan);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Avatar + name */
+    .identity {
+      flex-shrink: 0;
+      text-align: center;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+
+    .avatar-ring {
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 8px;
+      position: relative;
+    }
+    .avatar-ring::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--accent), var(--cyan), var(--pink), var(--accent));
+      animation: spin 5s linear infinite;
+    }
+    .avatar-ring::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--bg);
+    }
+    .avatar-inner {
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #1a2236, #0d1320);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--cyan);
+    }
+    .verified {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 22px;
+      height: 22px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      border: 2px solid var(--bg);
+    }
+    .verified svg { width: 12px; height: 12px; fill: white; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .name {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .role {
+      font-size: 11px;
+      color: #818cf8;
+      margin-top: 1px;
+    }
+
+    /* Headline */
+    .headline {
+      flex-shrink: 0;
+      text-align: center;
+      animation: fadeUp 0.7s 0.15s ease both;
+    }
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.55rem, 4.2vw, 2.35rem);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+    }
+    h1 .grad {
+      background: linear-gradient(90deg, var(--cyan), var(--accent), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sub {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 420px;
+    }
+    .sub strong { color: #a5b4fc; font-weight: 600; }
+
+    /* Tags */
+    .tags {
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .tag {
+      padding: 4px 11px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.22);
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: #a5b4fc;
+    }
+
+    /* Instruments */
+    .instruments {
+      flex-shrink: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      width: 100%;
+      max-width: 520px;
+      animation: fadeUp 0.7s 0.25s ease both;
+    }
+    .inst {
+      background: var(--card);
+      border: 1px solid rgba(99, 102, 241, 0.16);
+      border-radius: 14px;
+      padding: 12px 8px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .inst:hover {
+      transform: translateY(-4px);
+      border-color: rgba(99, 102, 241, 0.45);
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
+    }
+    .inst-icon {
+      width: 32px; height: 32px;
+      margin: 0 auto 6px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+    .inst:nth-child(1) .inst-icon { background: rgba(59,130,246,0.2); }
+    .inst:nth-child(2) .inst-icon { background: rgba(34,197,94,0.2); }
+    .inst:nth-child(3) .inst-icon { background: rgba(249,115,22,0.2); }
+    .inst:nth-child(4) .inst-icon { background: rgba(236,72,153,0.2); }
+    .inst-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .inst-name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    /* Stats */
+    .stats {
+      flex-shrink: 0;
+      display: flex;
+      width: 100%;
+      max-width: 400px;
+      background: var(--card);
+      border: 1px solid rgba(99, 102, 241, 0.18);
+      border-radius: 999px;
+      padding: 10px 6px;
+      backdrop-filter: blur(10px);
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+    .stat {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+    .stat:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 1px; height: 22px;
+      background: rgba(99, 102, 241, 0.22);
+    }
+    .stat-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat:nth-child(2) .stat-val {
+      background: linear-gradient(90deg, #fbbf24, #f59e0b);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .stat:nth-child(3) .stat-val {
+      background: linear-gradient(90deg, #34d399, #10b981);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .stat-lbl {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* Trust */
+    .trust {
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      font-size: 11.5px;
+      color: var(--muted);
+      animation: fadeUp 0.7s 0.35s ease both;
+    }
+    .trust span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .trust svg { width: 13px; height: 13px; opacity: 0.85; }
+
+    /* CTA */
+    .cta-wrap {
+      flex-shrink: 0;
+      animation: fadeUp 0.7s 0.4s ease both;
+    }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, var(--accent), #4f46e5);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 6px 24px rgba(99, 102, 241, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(255,255,255,0.18), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.45s ease;
+    }
+    .cta:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 32px rgba(99, 102, 241, 0.5);
+    }
+    .cta:hover::before { transform: translateX(100%); }
+    .cta svg { width: 17px; height: 17px; fill: currentColor; }
+
+    /* Features – compact row */
+    .features {
+      flex-shrink: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+      max-width: 700px;
+      animation: fadeUp 0.7s 0.45s ease both;
+    }
+    .feat {
+      background: var(--card);
+      border: 1px solid rgba(99, 102, 241, 0.14);
+      border-radius: 12px;
+      padding: 12px 10px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+    .feat-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .feat h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .feat p {
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    /* Footer */
+    .footer {
+      flex-shrink: 0;
+      text-align: center;
+      font-size: 10px;
+      color: #64748b;
+      animation: fadeUp 0.7s 0.5s ease both;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Small screens – keep no scroll */
+    @media (max-height: 700px) {
+      .page { padding: 10px 14px 12px; }
+      .avatar-ring { width: 64px; height: 64px; }
+      .avatar-inner { font-size: 17px; }
+      h1 { font-size: clamp(1.35rem, 3.8vw, 1.9rem); }
+      .sub { font-size: 12px; margin-top: 4px; }
+      .inst { padding: 9px 6px; }
+      .feat { padding: 9px 8px; }
+      .feat p { display: none; }
+    }
+
+    @media (max-width: 520px) {
+      .instruments { max-width: 100%; gap: 8px; }
+      .features { gap: 8px; }
+      .feat h3 { font-size: 11.5px; }
+      .feat p { font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="page">
+    <!-- Top -->
+    <div class="top-badge">
+      <span class="dot"></span>
+      India’s Top SEBI Registered Research Analyst
+      <span class="dot"></span>
+    </div>
+
+    <!-- Identity -->
+    <div class="identity">
+      <div class="avatar-ring">
+        <div class="avatar-inner">PB</div>
+        <div class="verified">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </div>
+      </div>
+      <div class="name">Pankaj Bharadwaj</div>
+      <div class="role">SEBI Registered Research Analyst</div>
+    </div>
+
+    <!-- Headline -->
+    <div class="headline">
+      <h1>LEARN WITH <span class="grad">PANKAJ BHARADWAJ</span></h1>
+      <p class="sub"><strong>Educational Masterclass</strong> · 60K+ Learners · Bank Nifty, Nifty, Finnifty &amp; more</p>
+    </div>
+
+    <!-- Tags -->
+    <div class="tags">
+      <span class="tag">Live Market Education</span>
+      <span class="tag">Risk Management</span>
+      <span class="tag">Technical Analysis</span>
+      <span class="tag">Position Sizing</span>
+    </div>
+
+    <!-- Instruments -->
+    <div class="instruments">
+      <div class="inst">
+        <div class="inst-icon">🏦</div>
+        <div class="inst-label">Bank</div>
+        <div class="inst-name">Nifty</div>
+      </div>
+      <div class="inst">
+        <div class="inst-icon">📈</div>
+        <div class="inst-label">Nifty</div>
+        <div class="inst-name">50</div>
+      </div>
+      <div class="inst">
+        <div class="inst-icon">₹</div>
+        <div class="inst-label">Finn</div>
+        <div class="inst-name">Nifty</div>
+      </div>
+      <div class="inst">
+        <div class="inst-icon">🏛</div>
+        <div class="inst-label">Sensex</div>
+        <div class="inst-name">SEX</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-val">60K+</div>
+        <div class="stat-lbl">Learners</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">SEBI</div>
+        <div class="stat-lbl">Registered</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">FREE</div>
+        <div class="stat-lbl">Education</div>
+      </div>
+    </div>
+
+    <!-- Trust -->
+    <div class="trust">
+      <span>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        SEBI Verified
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+        8 Instruments
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        India #1
+      </span>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-wrap">
+      <a href="https://t.me/+E9ALKpG49pBkYTQ1" target="_blank" rel="noopener noreferrer" class="cta">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        Start Learning Free
+      </a>
+    </div>
+
+    <!-- Features -->
+    <div class="features">
+      <div class="feat">
+        <div class="feat-icon">📚</div>
+        <h3>Structured Curriculum</h3>
+        <p>Basics to advanced strategies — pure education</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🎯</div>
+        <h3>Live Market Sessions</h3>
+        <p>Real-time analysis explained step-by-step</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🛡️</div>
+        <h3>Risk-First Mindset</h3>
+        <p>Capital protection &amp; position sizing first</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <p class="footer">
+      Educational content only · Not investment advice · SEBI Registered · Ads by <a href="https://telegram.me/+TRlJl628l-FkMWE9" target="_blank" rel="noopener noreferrer" style="color:#818cf8;text-decoration:none;">@Nexgroww_agency</a>
+    </p>
+  </div>
+</body>
+</html>
